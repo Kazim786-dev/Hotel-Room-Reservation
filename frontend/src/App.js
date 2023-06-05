@@ -10,6 +10,7 @@ import { ReservationForm } from './components/ReserveRoom';
 import { AddRoomForm } from './components/AddRoom';
 import { AddHotelForm } from './components/Hotel/AddHotel';
 import { AvailableRooms } from '../src/components/Hotel/TodayAvailableRooms';
+import {NavBar} from './components/NavBar'
 
 const App = () => {
   const token = localStorage.getItem('token');
@@ -44,7 +45,9 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      {isValid && <NavBar isValid={isValid}/>}
       <Routes>
+        <Route exact path="/" element={<h1>Welcome to very this Hotel Room Reservation App</h1>} />
         {isValid && <Route exact path="/hotel/add" element={<AddHotelForm />} />}
         {isValid && <Route exact path="/hotel/today-available-rooms" element={<HotelNRoomProvider><AvailableRooms /></HotelNRoomProvider>} />}
         {isValid && <Route exact path="/hotel/rooms" element={<HotelNRoomProvider><RoomList /></HotelNRoomProvider>} />}

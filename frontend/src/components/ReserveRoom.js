@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useContext } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Container, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { HotelNRoomContext } from './HotelNRoomProvider';
@@ -119,7 +119,9 @@ const ReservationForm = () => {
     };
 
     return (
-        <div>
+        <Container>
+            <Col xs={12} md={6} lg={4} className="mx-auto">
+            <div>
             <h2>Make a Reservation for Room {roomNum}</h2>
 
             {error && <Alert variant="danger">{error}</Alert>}
@@ -229,6 +231,9 @@ const ReservationForm = () => {
                 </Form>
             )}
         </div>
+            </Col>
+        </Container>
+        
     );
 };
 

@@ -7,6 +7,9 @@ import { HotelNRoomProvider } from './components/HotelNRoomProvider';
 import {BookingCalendar} from './components/BookingCalendar'
 import { ReservationForm } from './components/ReserveRoom';
 import {AddRoomForm} from './components/AddRoom';
+import { AddHotelForm } from './components/Hotel/AddHotel';
+import { AvailableRooms } from '../src/components/Hotel/TodayAvailableRooms';
+
 
 const App = () => {
 
@@ -14,13 +17,15 @@ const App = () => {
   const token = localStorage.getItem('token');
 
   if (!token) {
-    return <h2>Error: You are not logged in</h2>;
+    return <h2>Error: You are not logged in/authorized</h2>;
   }
 
   return (
     <BrowserRouter>
       
         <Routes>
+          <Route exact path="hotel/add" element={<AddHotelForm/>} />
+          <Route exact path="hotel/today-available-rooms" element={<HotelNRoomProvider><AvailableRooms/></HotelNRoomProvider>} />
           <Route exact path="hotel/rooms" element={<HotelNRoomProvider><RoomList/></HotelNRoomProvider>} />
           <Route exact path="/room/update" element={<HotelNRoomProvider><UpdateRoomPage/></HotelNRoomProvider>} />
           <Route exact path="/room/bookings" element={<HotelNRoomProvider><BookingCalendar/></HotelNRoomProvider>} />

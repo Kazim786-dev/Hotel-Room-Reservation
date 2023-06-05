@@ -15,6 +15,7 @@ let checkRole=(Role)=>{
 
 let verifyuserloggedin=(req,res,next)=>{
     let token = req.headers['token'];
+    
     jwt.verify(token, process.env.secret_key , (err, decoded) =>{
         if(!err){
             req.decoded = decoded;

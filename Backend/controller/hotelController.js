@@ -7,13 +7,12 @@ const Reservation = require('../models/reservationModel')
 // function to add a new hotel
 const addHotel = async (req, res) => {
     try {
-      const { name, address, contactInformation, availableRoomTypes, pricing, amenities } = req.body;
+      const { name, address, contactInformation, availableRoomTypes, amenities } = req.body;
       const hotel = new Hotel({
         name,
         address,
         contactInformation,
         availableRoomTypes,
-        pricing,
         amenities
       });
       const newHotel = await hotel.save();

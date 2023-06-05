@@ -17,10 +17,10 @@ const hotelSchema = new mongoose.Schema({
     type: [String],
     required: true
   },
-  pricing: {
-    type: Number,
-    required: true
-  },
+  // pricing: {
+  //   type: Number,
+  //   required: true
+  // },
   amenities: {
     type: [String],
     required: true

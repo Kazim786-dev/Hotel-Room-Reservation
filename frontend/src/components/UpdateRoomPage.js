@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { HotelNRoomContext } from './HotelNRoomProvider';
 
 const UpdateRoomPage = () => {
@@ -13,16 +13,20 @@ const UpdateRoomPage = () => {
   
   const handleUpdateType = async (e) => {
     e.preventDefault();
+    if (!type) {
+      setUpdateStatus('Please enter the room type.');
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:3001/rooms/update-room-type`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'token': token,
+          token: token,
         },
         body: JSON.stringify({ type, roomId }),
       });
-      if (!response.error) {
+      if (response.ok) {
         const updatedRoom = await response.json();
         setType(updatedRoom.type);
         setUpdateStatus('Room type updated successfully.');
@@ -38,16 +42,20 @@ const UpdateRoomPage = () => {
 
   const handleUpdateAvailability = async (e) => {
     e.preventDefault();
+    if (!availability) {
+      setUpdateStatus('Please select the room availability.');
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:3001/rooms/update-room-status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'token': token,
+          token: token,
         },
         body: JSON.stringify({ availability, roomId }),
       });
-      if (!response.error) {
+      if (response.ok) {
         const updatedRoom = await response.json();
         setAvailability(updatedRoom.availability);
         setUpdateStatus('Room availability updated successfully.');
@@ -63,16 +71,20 @@ const UpdateRoomPage = () => {
 
   const handleUpdateAmenities = async (e) => {
     e.preventDefault();
+    if (amenities.length === 0) {
+      setUpdateStatus('Please select at least one amenity.');
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:3001/rooms/update-room-amenities`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'token': token,
+          token: token,
         },
         body: JSON.stringify({ amenities, roomId }),
       });
-      if (!response.error) {
+      if (response.ok) {
         const updatedRoom = await response.json();
         setAmenities(updatedRoom.amenities);
         setUpdateStatus('Room amenities updated successfully.');
@@ -88,16 +100,24 @@ const UpdateRoomPage = () => {
 
   const handleUpdatePrice = async (e) => {
     e.preventDefault();
+    if (!price) {
+      setUpdateStatus('Please enter the room price.');
+      return;
+    }
+    if (price < 20) {
+      setUpdateStatus('Price cannot be less than 20$');
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:3001/rooms/update-room-price`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'token': token,
+          token: token,
         },
         body: JSON.stringify({ price: parseInt(price), roomId }), // Parse price as an integer
       });
-      if (!response.error) {
+      if (response.ok) {
         const updatedRoom = await response.json();
         setPrice(updatedRoom.price);
         setUpdateStatus('Room price updated successfully.');
@@ -111,23 +131,21 @@ const UpdateRoomPage = () => {
     }
   };
 
-
   const handleAmenityChange = (amenity) => {
-  if (amenities.includes(amenity)) {
-    // Remove the amenity from the list if it's already selected
-    setAmenities(amenities.filter((a) => a !== amenity));
-  } else {
-    // Add the amenity to the list if it's not already selected
-    setAmenities([...amenities, amenity]);
-  }
-};
-
+    if (amenities.includes(amenity)) {
+      // Remove the amenity from the list if it's already selected
+      setAmenities(amenities.filter((a) => a !== amenity));
+    } else {
+      // Add the amenity to the list if it's not already selected
+      setAmenities([...amenities, amenity]);
+    }
+  };
 
   return (
     <div>
       <h2>Update Room</h2>
 
-      {updateStatus && <p>{updateStatus}</p>}
+      {updateStatus && <Alert variant={updateStatus.includes('success') ? 'success' : 'danger'}>{updateStatus}</Alert>}
 
       <Form onSubmit={handleUpdateType}>
         <Form.Group>
@@ -154,37 +172,36 @@ const UpdateRoomPage = () => {
       </Form>
 
       <Form onSubmit={handleUpdateAmenities}>
-      <Form.Group>
-  <Form.Label>Amenities:</Form.Label>
-  <div>
-    <Form.Check
-      type="checkbox"
-      id="amenity-wifi"
-      label="WiFi"
-      value="WiFi"
-      checked={amenities.includes("WiFi")}
-      onChange={(e) => handleAmenityChange(e.target.value)}
-    />
-    <Form.Check
-      type="checkbox"
-      id="amenity-tv"
-      label="TV"
-      value="TV"
-      checked={amenities.includes("TV")}
-      onChange={(e) => handleAmenityChange(e.target.value)}
-    />
-    <Form.Check
-      type="checkbox"
-      id="amenity-ac"
-      label="AC"
-      value="AC"
-      checked={amenities.includes("AC")}
-      onChange={(e) => handleAmenityChange(e.target.value)}
-    />
-    {/* Add more checkboxes for additional amenities */}
-  </div>
-</Form.Group>
-
+        <Form.Group>
+          <Form.Label>Amenities:</Form.Label>
+          <div>
+            <Form.Check
+              type="checkbox"
+              id="amenity-wifi"
+              label="WiFi"
+              value="WiFi"
+              checked={amenities.includes("WiFi")}
+              onChange={(e) => handleAmenityChange(e.target.value)}
+            />
+            <Form.Check
+              type="checkbox"
+              id="amenity-tv"
+              label="TV"
+              value="TV"
+              checked={amenities.includes("TV")}
+              onChange={(e) => handleAmenityChange(e.target.value)}
+            />
+            <Form.Check
+              type="checkbox"
+              id="amenity-ac"
+              label="AC"
+              value="AC"
+              checked={amenities.includes("AC")}
+              onChange={(e) => handleAmenityChange(e.target.value)}
+            />
+            {/* Add more checkboxes for additional amenities */}
+          </div>
+        </Form.Group>
         <Button variant="primary" type="submit">
           Update Amenities
         </Button>
@@ -192,7 +209,7 @@ const UpdateRoomPage = () => {
 
       <Form onSubmit={handleUpdatePrice}>
         <Form.Group>
-          <Form.Label>Price:</Form.Label>
+          <Form.Label>Price (in $):</Form.Label>
           <Form.Control type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
         </Form.Group>
         <Button variant="primary" type="submit">

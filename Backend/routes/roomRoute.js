@@ -25,7 +25,6 @@ roomRouter.patch('/update-room-amenities', verifyuserloggedin, checkRole("admin"
 // Route to update the price of a room
 roomRouter.patch('/update-room-price', verifyuserloggedin, checkRole("admin") , updateRoomPrice);
 
-
 //route to get all booking dates of a room
 roomRouter.get('/:roomId/getBookingCalendar', verifyuserloggedin, getBookingCalendar);
 

@@ -8,7 +8,7 @@ const hotelRouter = require('./routes/hotelRoute')
 
 // const Contact = require('./models/contact')
 require('dotenv').config()
-app.use(cors({origin: '*'}))
+app.use(cors())
 app.use(express.json())
 
 

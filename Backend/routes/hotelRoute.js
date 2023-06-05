@@ -14,5 +14,4 @@ hotelRouter.get('/:hotelId/rooms', verifyuserloggedin, getAllRooms);
 hotelRouter.get('/:hotelId/available-rooms', verifyuserloggedin , getAllAvailableRooms);
 
 
-
 module.exports = hotelRouter

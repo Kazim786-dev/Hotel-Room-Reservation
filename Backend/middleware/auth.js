@@ -15,7 +15,6 @@ let checkRole=(Role)=>{
 
 let verifyuserloggedin=(req,res,next)=>{
     let token = req.headers['token'];
-    
     jwt.verify(token, process.env.secret_key , (err, decoded) =>{
         if(!err){
             req.decoded = decoded;
@@ -26,6 +25,18 @@ let verifyuserloggedin=(req,res,next)=>{
     })
 }
 
+let validate=(req,res,next)=>{
+    let token = req.headers['token'];
+    jwt.verify(token, process.env.secret_key , (err, decoded) =>{
+        if(!err){
+            req.decoded = decoded;
+            res.json({message:"Valid token"})         
+        }else{
+            res.status(401).send({"message":"Not loggen in"})
+        }
+    })
+}
+
 module.exports={
-    verifyuserloggedin,checkRole
+    verifyuserloggedin,checkRole, validate
 }

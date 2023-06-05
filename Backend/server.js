@@ -5,7 +5,7 @@ var mongoose = require("mongoose")
 const userroute = require('./routes/userroute')
 const roomRouter = require('./routes/roomRoute')
 const hotelRouter = require('./routes/hotelRoute')
-
+const {validate} = require('./middleware/auth')
 // const Contact = require('./models/contact')
 require('dotenv').config()
 app.use(cors())
@@ -24,15 +24,17 @@ mongoose.connect(MONGODB_URI).then(()=>{
 console.log(err)
 })
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+
+app.use('/verifytoken',validate)
+
+// app.get('/', (req, res) => {
+//     res.send('Hello World!')
+// })
 
 //redirecting to user route
 app.use('/users', userroute)
 app.use('/rooms', roomRouter)
 app.use('/hotels', hotelRouter)
-
 
 
 app.listen(port, () => {

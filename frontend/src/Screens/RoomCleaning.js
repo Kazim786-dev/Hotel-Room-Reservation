@@ -110,11 +110,22 @@ const RoomCleaning = () => {
   return (
     <div>
       <h2 className="text-center">Room Cleaning Schedule</h2>
-      <Button variant="primary" onClick={()=>{
+      <br/><br/>
+      <div className="text-center">
+      <Button variant="primary"  onClick={()=>{
                 setShowModal(true);
              }}>
-                Book Schedule
+                Book Cleaning
       </Button>
+      <span> </span>
+      <Button variant="primary" onClick={()=>{
+                const today = new Date().toISOString().slice(0, 10);
+                const todaySchedules = cleaningSchedule.filter((schedule) => schedule.date === today);
+                setCleaningSchedule(todaySchedules)
+             }}>
+                Filter Today's Activity
+      </Button>
+      </div>
       {showModal && (
                 <BookCleaningScheduleModal show={showModal} onClose={handleCloseModal} onConfirm={handleConfirmBooking} roomNumbers={rooms} 
               />

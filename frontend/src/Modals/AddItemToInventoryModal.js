@@ -9,16 +9,22 @@ const AddItemToInventoryModal = ({ categories, show, onClose, onAddItem }) => {
   const [price, setPrice] = useState('');
 
   const handleAddItem = () => {
-    const newItem = {
-      name: itemName,
-      category: itemCategory,
-      description,
-      quantity,
-      price,
-    };
 
-    onAddItem(newItem);
-    handleClose();
+    if (!itemName==="" && !itemCategory==="" && !quantity==="") {
+      const newItem = {
+        name: itemName,
+        category: itemCategory,
+        description,
+        quantity,
+        price,
+      };
+
+      onAddItem(newItem);
+      handleClose();
+
+    } else
+      alert("Error")
+
   };
 
   const handleClose = () => {
@@ -51,7 +57,7 @@ const AddItemToInventoryModal = ({ categories, show, onClose, onAddItem }) => {
             value={itemCategory}
             onChange={(e) => setItemCategory(e.target.value)}
           >
-            
+
             {categories.map((category) => (
               <option key={category} value={category}>
                 {category}

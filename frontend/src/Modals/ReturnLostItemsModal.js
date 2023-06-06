@@ -15,6 +15,7 @@ const ReturnLostItemsModal = ({ show, onClose, onConfirm }) => {
     try {
       // Perform the necessary validation or data processing here
 
+      if (returnDescription && !returnDescription==="") {
       // Call the onConfirm callback with the return description
       onConfirm(returnDescription);
       
@@ -22,6 +23,8 @@ const ReturnLostItemsModal = ({ show, onClose, onConfirm }) => {
       setReturnDescription('');
       setErrorMessage('');
       onClose();
+      }else
+      alert("Error")
     } catch (error) {
       console.error(error);
       setErrorMessage('Error: Failed to return the lost item');

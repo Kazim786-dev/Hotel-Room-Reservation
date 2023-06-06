@@ -6,21 +6,23 @@ const BookInspectionSchedule = ({ show, onClose, onConfirm, roomNumbers }) => {
   const [date, setDate] = useState('');
  
   const handleConfirm = () => {
+    if (!roomNumber=="" && !date=="" ) {
+     
     const dateTime = new Date(`${date}`);
     const formattedDate = dateTime.toISOString();
-
-    if (roomNumber && date ) {
-      onConfirm(roomNumber, formattedDate);
+   
+    onConfirm(roomNumber, formattedDate);
       setRoomNumber('');
       setDate('');
      
-    }
+    }else
+    alert("Error")
   };
 
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Book Cleaning Schedule</Modal.Title>
+        <Modal.Title>Book Inspection Schedule</Modal.Title>
       </Modal.Header>
       <Modal.Body>
       <Form.Group controlId="roomNumber">

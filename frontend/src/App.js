@@ -1,5 +1,5 @@
 
-import Navbar from './Components/Navbar'
+import Navbar from './Components/NavBar'
 import LostFoundComponent  from './Screens/LostFound'
 import RoomCleaning from './Screens/RoomCleaning'
 import RoomInspection from './Screens/RoomInspection'

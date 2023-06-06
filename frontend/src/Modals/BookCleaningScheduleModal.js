@@ -6,15 +6,17 @@ const BookCleaningSchedule = ({ show, onClose, onConfirm, roomNumbers }) => {
   const [date, setDate] = useState('');
  
   const handleConfirm = () => {
+    if (!roomNumber=="" && !date=="") {
+     
     const dateTime = new Date(`${date}`);
     const formattedDate = dateTime.toISOString();
 
-    if (roomNumber && date ) {
-      onConfirm(roomNumber, formattedDate);
+    onConfirm(roomNumber, formattedDate);
       setRoomNumber('');
       setDate('');
      
-    }
+    }else
+      alert("Error")
   };
 
   return (

@@ -4,7 +4,7 @@ const roomRouter = express.Router()
 const {verifyuserloggedin,checkRole} = require('../middleware/auth')
 
 const {addRoom,reserverRoom, updateRoomType, updateRoomStatus, updateRoomAmenities, 
-        updateRoomPrice, getBookingCalendar } = require('../Controller/roomController')
+        updateRoomPrice, getBookingCalendar, getRoomNumbers } = require('../Controller/roomController')
     
 
 // Route to add a room
@@ -27,6 +27,8 @@ roomRouter.patch('/update-room-price', verifyuserloggedin, checkRole("admin") , 
 
 //route to get all booking dates of a room
 roomRouter.get('/:roomId/getBookingCalendar', verifyuserloggedin, getBookingCalendar);
+
+roomRouter.get('/getAll', getRoomNumbers);
 
       
 

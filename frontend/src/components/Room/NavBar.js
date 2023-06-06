@@ -1,9 +1,8 @@
-
 import React from "react";
-import { Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 
-const Navbarr = (isValid) => {
+export const NavBar = (isValid) => {
     return (
         <Navbar bg="dark" variant="dark" expand="lg">
             <Navbar.Brand as={Link} to="/">My Hotel App</Navbar.Brand>
@@ -18,14 +17,8 @@ const Navbarr = (isValid) => {
                             <Nav.Link as={Link} to="/room/add">Add Room</Nav.Link>
                         </>
                     )}
-                    <Nav.Link href="/Room-Cleaning">Room-Cleaning</Nav.Link>
-                    <Nav.Link href="/Room-Inspection">Room-Inspection</Nav.Link>
-                    <Nav.Link href="/Inventory">Inventory</Nav.Link>
-                    <Nav.Link href="/Lost&Found">Lost&Found</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
     )
 }
-
-export default Navbarr;

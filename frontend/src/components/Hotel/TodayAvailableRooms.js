@@ -1,7 +1,7 @@
 import React, { useState,useContext } from 'react';
 import { Button, Alert } from 'react-bootstrap';
-import { HotelNRoomContext } from '../HotelNRoomProvider';
-import { RoomCards } from '../RoomCards';
+import { HotelNRoomContext } from '../Room/HotelNRoomProvider';
+import { RoomCards } from '../Room/RoomCards';
 
 
 const AvailableRooms = () => {

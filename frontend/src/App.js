@@ -1,18 +1,26 @@
-import './App.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Navbar from './Components/Navbar'
+import LostFoundComponent  from './Screens/LostFound'
+import RoomCleaning from './Screens/RoomCleaning'
+import RoomInspection from './Screens/RoomInspection'
+import InventoryDashboard from './Screens/InventoryDashboard'
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+
+import RoomList from './Components/Room/RoomList';
+import UpdateRoomPage from './Components/Room/UpdateRoomPage';
+import { HotelNRoomProvider } from './Components/Room/HotelNRoomProvider';
+import { BookingCalendar } from './Components/Room/BookingCalendar'
+import { ReservationForm } from './Components/Room/ReserveRoom';
+import { AddRoomForm } from './Components/Room/AddRoom';
+import { AddHotelForm } from './Components/Hotel/AddHotel';
+import { AvailableRooms } from './Components/Hotel/TodayAvailableRooms';
+// import {Navbar} from './components/Navbar'
 import { useEffect, useState } from 'react';
 
-import RoomList from './components/RoomList';
-import UpdateRoomPage from './components/UpdateRoomPage';
-import { HotelNRoomProvider } from './components/HotelNRoomProvider';
-import { BookingCalendar } from './components/BookingCalendar'
-import { ReservationForm } from './components/ReserveRoom';
-import { AddRoomForm } from './components/AddRoom';
-import { AddHotelForm } from './components/Hotel/AddHotel';
-import { AvailableRooms } from '../src/components/Hotel/TodayAvailableRooms';
-import {NavBar} from './components/NavBar'
 
-const App = () => {
+
+function App() {
+
   const token = localStorage.getItem('token');
   const[isValid,setIsvalid] = useState( false)
   useEffect(() => {
@@ -44,11 +52,17 @@ const App = () => {
   }, []);
 
   return (
+    <>
+    
     <BrowserRouter>
-      {isValid && <NavBar isValid={isValid}/>}
-      <Routes>
-        <Route exact path="/" element={<h1>Welcome to very this Hotel Room Reservation App</h1>} />
-        {isValid && <Route exact path="/hotel/add" element={<AddHotelForm />} />}
+    {isValid && <Navbar isValid={isValid}/>}
+     <Routes>
+    
+      <Route path="/Room-Cleaning" element={<RoomCleaning/>}/>
+      <Route path="/Room-Inspection" element={<RoomInspection/>}/>
+      <Route path="/Inventory" element={<InventoryDashboard/>}/>
+      <Route path="/Lost&Found" element={<LostFoundComponent/>}/>
+      {isValid && <Route exact path="/hotel/add" element={<AddHotelForm />} />}
         {isValid && <Route exact path="/hotel/today-available-rooms" element={<HotelNRoomProvider><AvailableRooms /></HotelNRoomProvider>} />}
         {isValid && <Route exact path="/hotel/rooms" element={<HotelNRoomProvider><RoomList /></HotelNRoomProvider>} />}
         {isValid && <Route exact path="/room/update" element={<HotelNRoomProvider><UpdateRoomPage /></HotelNRoomProvider>} />}
@@ -56,9 +70,12 @@ const App = () => {
         {isValid && <Route exact path="/room/reserve" element={<HotelNRoomProvider><ReservationForm /></HotelNRoomProvider>} />}
         {isValid && <Route exact path="/room/add" element={<HotelNRoomProvider><AddRoomForm /></HotelNRoomProvider>} />}
         {!isValid &&<Route path="*" element={<h1>Page Not found Or You are not authorized.</h1>} />}
+
+     
       </Routes>
-    </BrowserRouter>
+     </BrowserRouter>
+     </>
   );
-};
+}
 
 export default App;

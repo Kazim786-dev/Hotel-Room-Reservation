@@ -28,13 +28,13 @@ const RoomCards = ({ rooms, updateRoomId }) => {
               </Card.Text>
 
               <Button onClick={() => handleUpdateRoom(room._id)}>
-                <Link to="/room/update">Update Room</Link>
+                <Link to="/room/update" style={{ color: 'white', textDecoration: 'none' }}>Update Room</Link>
               </Button>{' '}
               <Button onClick={() => handleUpdateRoom(room._id)}>
-                <Link to="/room/bookings">Bookings</Link>
+                <Link to="/room/bookings" style={{ color: 'white', textDecoration: 'none' }}>Bookings</Link>
               </Button>{' '}
               <Button onClick={() => handleUpdateRoom(room._id)}>
-                <Link to="/room/reserve">Reserve</Link>
+                <Link to="/room/reserve" style={{ color: 'white', textDecoration: 'none' }}>Reserve</Link>
               </Button>
             </Card.Body>
           </Card>

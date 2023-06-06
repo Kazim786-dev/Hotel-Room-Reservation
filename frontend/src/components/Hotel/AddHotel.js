@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert, Container,Col } from 'react-bootstrap';
+import { Form, Button, Alert, Container, Col } from 'react-bootstrap';
+import { isEmail } from 'validator';
+
+import axios from 'axios';
+
+const API_KEY = 'dd045c148bd752dd59e00c7685362ef8';
 
 const AddHotelForm = () => {
   const [name, setName] = useState('');
@@ -14,14 +19,42 @@ const AddHotelForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Perform validations
     if (!name || !address || !contactInformation || !availableRoomTypes) {
       setError('Please fill in all the required fields');
       setSuccess(null);
       return;
     }
-
+  
+    // Email validation
+    if (!isEmail(contactInformation)) {
+      setError('Please enter a valid email address');
+      setSuccess(null);
+      return;
+    }
+  
+    // email verification
+    try {
+      const response = await axios.get(
+        `https://apilayer.net/api/check?access_key=${API_KEY}&email=${encodeURIComponent(contactInformation)}`
+      );
+  
+      if (!response.data.format_valid) {
+        setError('Please enter a valid email address');
+        setSuccess(null);
+        return;
+      } else if (!response.data.smtp_check) {
+        setError('Email does not exist or could not be verified');
+        setSuccess(null);
+        return;
+      }
+    } catch (error) {
+      setError('Failed to verify email');
+      setSuccess(null);
+      return;
+    }
+  
     try {
       const response = await fetch('http://localhost:3001/hotels/add-hotel', {
         method: 'POST',
@@ -37,7 +70,7 @@ const AddHotelForm = () => {
           amenities,
         }),
       });
-
+  
       if (response.ok) {
         setSuccess('Hotel added successfully');
         setName('');
@@ -56,16 +89,18 @@ const AddHotelForm = () => {
       setSuccess(null);
     }
   };
+  
 
   return (
     <Container>
+      <div className="my-4"></div>
       <Col xs={12} md={6} lg={4} className="mx-auto">
-        <div>
-          <h2>Add a Hotel</h2>
+        <div className="border p-4">
+          <h2 className="text-center">Add a Hotel</h2>
           {error && <Alert variant="danger">{error}</Alert>}
           {success && <Alert variant="success">{success}</Alert>}
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="name">
+            <Form.Group className="mb-2" controlId="name">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
@@ -74,7 +109,7 @@ const AddHotelForm = () => {
                 required
               />
             </Form.Group>
-            <Form.Group controlId="address">
+            <Form.Group className="mb-2" controlId="address">
               <Form.Label>Address</Form.Label>
               <Form.Control
                 type="text"
@@ -83,7 +118,7 @@ const AddHotelForm = () => {
                 required
               />
             </Form.Group>
-            <Form.Group controlId="contactInformation">
+            <Form.Group className="mb-2" controlId="contactInformation">
               <Form.Label>Contact Information (Mail)</Form.Label>
               <Form.Control
                 type="email"
@@ -92,7 +127,7 @@ const AddHotelForm = () => {
                 required
               />
             </Form.Group>
-            <Form.Group controlId="availableRoomTypes">
+            <Form.Group className="mb-2" controlId="availableRoomTypes">
               <Form.Label>Available Room Types</Form.Label>
               <Form.Check
                 type="checkbox"
@@ -135,7 +170,7 @@ const AddHotelForm = () => {
               />
 
             </Form.Group>
-            <Form.Group controlId="amenities">
+            <Form.Group className="mb-2" controlId="amenities">
               <Form.Label>Amenities</Form.Label>
               <Form.Check
                 type="checkbox"
@@ -177,9 +212,11 @@ const AddHotelForm = () => {
                 }}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Add Hotel
-            </Button>
+            <div className="d-flex justify-content-center">
+              <Button variant="primary" type="submit">
+                Add Hotel
+              </Button>
+            </div>
           </Form>
         </div>
       </Col>

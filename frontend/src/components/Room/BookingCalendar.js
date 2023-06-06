@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { ListGroup } from 'react-bootstrap';
+import { Container, ListGroup } from 'react-bootstrap';
 import { HotelNRoomContext } from './HotelNRoomProvider';
 
 const BookingCalendar = () => {
@@ -40,17 +40,21 @@ const BookingCalendar = () => {
   }
 
   return (
-    <div>
-      <h2>Booking Calendar for Room {roomNumber}</h2>
+    <Container>
+      <h2 className="text-center mb-4">Booking Calendar for Room {roomNumber}</h2>
       <ListGroup>
         {bookingCalendar.map((booking) => (
-          <ListGroup.Item key={`${booking.checkInDate}-${booking.checkOutDate}`}>
-            Check-in: {new Date(booking.checkInDate).toLocaleDateString()} {new Date(booking.checkInDate).toLocaleTimeString()}<br/>
-            Check-out: {new Date(booking.checkOutDate).toLocaleDateString()} {new Date(booking.checkOutDate).toLocaleTimeString()}
+          <ListGroup.Item key={`${booking.checkInDate}-${booking.checkOutDate}`} className="d-flex justify-content-between">
+            <div>
+              <strong>Check-in:</strong> {new Date(booking.checkInDate).toLocaleString()}
+            </div>
+            <div>
+              <strong>Check-out:</strong> {new Date(booking.checkOutDate).toLocaleString()}
+            </div>
           </ListGroup.Item>
         ))}
       </ListGroup>
-    </div>
+    </Container>
   );
 };
 

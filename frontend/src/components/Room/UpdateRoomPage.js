@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Container, Col} from 'react-bootstrap';
 import { HotelNRoomContext } from './HotelNRoomProvider';
+import MessageModal from './MessageModel'
 
 const UpdateRoomPage = () => {
   const { roomId } = useContext(HotelNRoomContext);
@@ -9,6 +10,7 @@ const UpdateRoomPage = () => {
   const [amenities, setAmenities] = useState([]);
   const [price, setPrice] = useState('');
   const [updateStatus, setUpdateStatus] = useState('');
+  const [updatedRoom, setUpdatedRoom] = useState()
   const token = localStorage.getItem('token'); // Retrieve token from local storage
   
   const handleUpdateType = async (e) => {
@@ -27,7 +29,7 @@ const UpdateRoomPage = () => {
         body: JSON.stringify({ type, roomId }),
       });
       if (response.ok) {
-        const updatedRoom = await response.json();
+        setUpdatedRoom( await response.json()) ;
         setType(updatedRoom.type);
         setUpdateStatus('Room type updated successfully.');
       } else {
@@ -56,7 +58,7 @@ const UpdateRoomPage = () => {
         body: JSON.stringify({ availability, roomId }),
       });
       if (response.ok) {
-        const updatedRoom = await response.json();
+        setUpdatedRoom( await response.json()) ;
         setAvailability(updatedRoom.availability);
         setUpdateStatus('Room availability updated successfully.');
       } else {
@@ -85,7 +87,7 @@ const UpdateRoomPage = () => {
         body: JSON.stringify({ amenities, roomId }),
       });
       if (response.ok) {
-        const updatedRoom = await response.json();
+        setUpdatedRoom( await response.json()) ;
         setAmenities(updatedRoom.amenities);
         setUpdateStatus('Room amenities updated successfully.');
       } else {
@@ -118,7 +120,7 @@ const UpdateRoomPage = () => {
         body: JSON.stringify({ price: parseInt(price), roomId }), // Parse price as an integer
       });
       if (response.ok) {
-        const updatedRoom = await response.json();
+        setUpdatedRoom( await response.json()) ;
         setPrice(updatedRoom.price);
         setUpdateStatus('Room price updated successfully.');
       } else {
@@ -142,22 +144,37 @@ const UpdateRoomPage = () => {
   };
 
   return (
-    <div>
-      <h2>Update Room</h2>
+    <Container >
+      <Col xs={12} md={6} lg={4} className="mx-auto">
+    <div className="border p-3 my-3">
+      <h2 className="text-center">Update Room</h2>
 
-      {updateStatus && <Alert variant={updateStatus.includes('success') ? 'success' : 'danger'}>{updateStatus}</Alert>}
+      {updateStatus && !updateStatus.includes('success') && <Alert variant={'danger'}>{updateStatus}</Alert>}
+      {updateStatus && updateStatus.includes('success') && <MessageModal room={updatedRoom} message={updateStatus} setUpdateStatus={setUpdateStatus}/>}
 
-      <Form onSubmit={handleUpdateType}>
-        <Form.Group>
-          <Form.Label>Type:</Form.Label>
-          <Form.Control type="text" value={type} onChange={(e) => setType(e.target.value)} />
-        </Form.Group>
+      <Form className="mb-3" onSubmit={handleUpdateType}>
+          <Form.Group controlId="type">
+              <Form.Label>Type</Form.Label>
+              <Form.Control
+                as="select"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                required
+              >
+                <option value="">Select Type</option>
+                <option value="luxury">Luxury</option>
+                <option value="standard">Standard</option>
+                <option value="premium">Premium</option>
+              </Form.Control>
+          </Form.Group>
+        <div className="d-flex justify-content-center">
         <Button variant="primary" type="submit">
           Update Type
         </Button>
+        </div>
       </Form>
 
-      <Form onSubmit={handleUpdateAvailability}>
+      <Form className="mb-3" onSubmit={handleUpdateAvailability}>
         <Form.Group>
           <Form.Label>Availability:</Form.Label>
           <Form.Select value={availability} onChange={(e) => setAvailability(e.target.value)}>
@@ -166,12 +183,14 @@ const UpdateRoomPage = () => {
             <option value="false">False</option>
           </Form.Select>
         </Form.Group>
+        <div className="d-flex justify-content-center">
         <Button variant="primary" type="submit">
           Update Availability
         </Button>
+        </div>
       </Form>
 
-      <Form onSubmit={handleUpdateAmenities}>
+      <Form className="mb-3" onSubmit={handleUpdateAmenities}>
         <Form.Group>
           <Form.Label>Amenities:</Form.Label>
           <div>
@@ -202,21 +221,27 @@ const UpdateRoomPage = () => {
             {/* Add more checkboxes for additional amenities */}
           </div>
         </Form.Group>
+        <div className="d-flex justify-content-center">
         <Button variant="primary" type="submit">
           Update Amenities
         </Button>
+        </div>
       </Form>
 
-      <Form onSubmit={handleUpdatePrice}>
+      <Form className="mb-3" onSubmit={handleUpdatePrice}>
         <Form.Group>
           <Form.Label>Price (in $):</Form.Label>
           <Form.Control type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
         </Form.Group>
+        <div className="d-flex justify-content-center">
         <Button variant="primary" type="submit">
           Update Price
         </Button>
+        </div>
       </Form>
     </div>
+    </Col>
+    </Container>
   );
 };
 

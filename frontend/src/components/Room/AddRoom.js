@@ -88,13 +88,14 @@ const AddRoomForm = () => {
 
   return (
     <Container >
+      <div className="my-4"></div>
       <Col xs={12} md={6} lg={4} className="mx-auto">
-        <div>
-          <h2>Add a Room</h2>
+      <div className="border p-4">
+          <h2 className="text-center">Add a Room</h2>
           {error && <Alert variant="danger">{error}</Alert>}
           {success && <Alert variant="success">{success}</Alert>}
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="roomNumber">
+            <Form.Group className="mb-2" controlId="roomNumber">
               <Form.Label>Room Number</Form.Label>
               <Form.Control
                 type="number"
@@ -103,7 +104,7 @@ const AddRoomForm = () => {
                 required
               />
             </Form.Group>
-            <Form.Group controlId="type">
+            <Form.Group className="mb-2" controlId="type">
               <Form.Label>Type</Form.Label>
               <Form.Control
                 as="select"
@@ -117,7 +118,7 @@ const AddRoomForm = () => {
                 <option value="premium">Premium</option>
               </Form.Control>
             </Form.Group>
-            <Form.Group controlId="availability">
+            <Form.Group className="mb-2" controlId="availability">
               <Form.Check
                 type="checkbox"
                 label="Availability"
@@ -125,7 +126,7 @@ const AddRoomForm = () => {
                 onChange={(e) => setAvailability(e.target.checked)}
               />
             </Form.Group>
-            <Form.Group controlId="price">
+            <Form.Group className="mb-2" controlId="price">
               <Form.Label>Price in $</Form.Label>
               <Form.Control
                 type="number"
@@ -134,7 +135,7 @@ const AddRoomForm = () => {
                 required
               />
             </Form.Group>
-            <Form.Group controlId="capacity">
+            <Form.Group className="mb-2" controlId="capacity">
               <Form.Label>Capacity</Form.Label>
               <Form.Control
                 type="number"
@@ -143,7 +144,7 @@ const AddRoomForm = () => {
                 required
               />
             </Form.Group>
-            <Form.Group controlId="amenities">
+            <Form.Group className="mb-2" controlId="amenities">
               <Form.Label>Amenities</Form.Label>
               <Form.Check
                 type="checkbox"
@@ -171,8 +172,21 @@ const AddRoomForm = () => {
                   }
                 }}
               />
+              <Form.Check
+                type="checkbox"
+                label="AC"
+                value="AC"
+                checked={amenities.includes('AC')}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setAmenities([...amenities, 'AC']);
+                  } else {
+                    setAmenities(amenities.filter((amenity) => amenity !== 'AC'));
+                  }
+                }}
+              />
             </Form.Group>
-            {/* <Form.Group controlId="hotelId">
+            {/* <Form.Group className="mb-2" controlId="hotelId">
               <Form.Label>Hotel ID</Form.Label>
               <Form.Control
                 type="text"
@@ -181,9 +195,11 @@ const AddRoomForm = () => {
                 required
               />
             </Form.Group> */}
+            <div className="d-flex justify-content-center">
             <Button variant="primary" type="submit">
               Add Room
             </Button>
+            </div>
           </Form>
         </div>
       </Col>

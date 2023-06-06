@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { HotelNRoomContext } from './HotelNRoomProvider';
 
+
 const ReservationForm = () => {
     const [userId, setUserId] = useState('');
     const { roomId } = useContext(HotelNRoomContext);
@@ -80,7 +81,8 @@ const ReservationForm = () => {
                 setError('');
             } else {
                 const errorData = await response.json();
-                setError(errorData.error);
+                // setError(errorData.error);
+                setError('Failed to make a reservation');
             }
         } catch (error) {
             setError('Failed to make a reservation');
@@ -120,122 +122,105 @@ const ReservationForm = () => {
     };
 
     return (
+        <>
+        <div className="my-4"></div>
         <Container>
-            <Col xs={12} md={6} lg={4} className="mx-auto">
-            <div>
-            <h2>Make a Reservation for Room {roomNum}</h2>
-
-            {error && <Alert variant="danger">{error}</Alert>}
-
-            {reservationId ? (
-                <Alert variant="success">Status: Reservation Successfull</Alert>
-            ) : (
+          <Col xs={12} md={6} lg={4} className="mx-auto">
+            <div className="border p-4">
+              <h2 className="text-center">Make a Reservation for Room {roomNum}</h2>
+    
+              {error && <Alert variant="danger">{error}</Alert>}
+    
+              {reservationId ? (
+                <Alert variant="success">Status: Reservation Successful</Alert>
+              ) : (
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group>
-                        <Form.Label>Check-in Date:</Form.Label>
-                        <br />
-                        <DatePicker
-                            selected={checkInDate}
-                            onChange={(date) => setCheckInDate(date)}
-                            minDate={new Date()}
-                            maxDate={new Date().setDate(new Date().getDate() + 30)}
-                            filterDate={(date) => !isDateBooked(date)}
-                            disabledKeyboardNavigation
-                            dateFormat="dd/MM/yyyy"
-                            utcOffset={0} // Set the UTC offset to 0
+                  <Form.Group className="mb-3">
+                    <Form.Label>Check-in Date:</Form.Label>
+                    <br />
+                    <DatePicker
+                      selected={checkInDate}
+                      onChange={(date) => setCheckInDate(date)}
+                      minDate={new Date()}
+                      maxDate={new Date().setDate(new Date().getDate() + 30)}
+                      filterDate={(date) => !isDateBooked(date)}
+                      disabledKeyboardNavigation
+                      dateFormat="dd/MM/yyyy"
+                      utcOffset={0}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Check-out Date:</Form.Label>
+                    <br />
+                    <DatePicker
+                      selected={checkOutDate}
+                      onChange={(date) => setCheckOutDate(date)}
+                      minDate={checkInDate ? new Date(checkInDate) : new Date()}
+                      maxDate={new Date().setDate(new Date().getDate() + 30)}
+                      filterDate={(date) => !isDateBooked(date)}
+                      disabledKeyboardNavigation
+                      dateFormat="dd/MM/yyyy"
+                      utcOffset={0}
+                    />
+                  </Form.Group>
+    
+                  <Form.Group className="mb-3">
+                    <Form.Label>Payment Method:</Form.Label>
+                    <Form.Select value={paymentMethod} onChange={handlePaymentMethodChange}>
+                      <option value="">Select Payment Method</option>
+                      <option value="card">Card</option>
+                      {/* Add more payment methods as needed */}
+                    </Form.Select>
+                  </Form.Group>
+    
+                  {paymentMethod === 'card' && (
+                    <div>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Card Number:</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={cardDetails.number}
+                          onChange={(e) => setCardDetails({ ...cardDetails, number: e.target.value })}
                         />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Check-out Date:</Form.Label>
-                        <br />
-                        <DatePicker
-                            selected={checkOutDate}
-                            onChange={(date) => setCheckOutDate(date)}
-                            minDate={checkInDate ? new Date(checkInDate) : new Date()}
-                            maxDate={new Date().setDate(new Date().getDate() + 30)}
-                            filterDate={(date) => !isDateBooked(date)}
-                            disabledKeyboardNavigation
-                            dateFormat="dd/MM/yyyy"
-                            utcOffset={0} // Set the UTC offset to 0
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Expiration Month:</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={cardDetails.exp_month}
+                          onChange={(e) => setCardDetails({ ...cardDetails, exp_month: e.target.value })}
                         />
-                    </Form.Group>
-
-
-                    <Form.Group>
-                        <Form.Label>Payment Method:</Form.Label>
-                        <Form.Select value={paymentMethod} onChange={handlePaymentMethodChange}>
-                            <option value="">Select Payment Method</option>
-                            <option value="card">Card</option>
-                            {/* Add more payment methods as needed */}
-                        </Form.Select>
-                    </Form.Group>
-
-                    {paymentMethod === 'card' && (
-                        <div>
-                            <Form.Group>
-                                <Form.Label>Card Number:</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={cardDetails.number}
-                                    onChange={(e) =>
-                                        setCardDetails({
-                                            ...cardDetails,
-                                            number: e.target.value,
-                                        })
-                                    }
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Expiration Month:</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    value={cardDetails.exp_month}
-                                    onChange={(e) =>
-                                        setCardDetails({
-                                            ...cardDetails,
-                                            exp_month: e.target.value,
-                                        })
-                                    }
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Expiration Year:</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    value={cardDetails.exp_year}
-                                    onChange={(e) =>
-                                        setCardDetails({
-                                            ...cardDetails,
-                                            exp_year: e.target.value,
-                                        })
-                                    }
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>CVC:</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    value={cardDetails.cvc}
-                                    onChange={(e) =>
-                                        setCardDetails({
-                                            ...cardDetails,
-                                            cvc: e.target.value,
-                                        })
-                                    }
-                                />
-                            </Form.Group>
-                        </div>
-                    )}
-                    <Button variant="primary" type="submit">
-                        Reserve Room
-                    </Button>
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Expiration Year:</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={cardDetails.exp_year}
+                          onChange={(e) => setCardDetails({ ...cardDetails, exp_year: e.target.value })}
+                        />
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>CVC:</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={cardDetails.cvc}
+                          onChange={(e) => setCardDetails({ ...cardDetails, cvc: e.target.value })}
+                        />
+                      </Form.Group>
+                    </div>
+                  )}
+                  <div className="d-flex justify-content-center">
+                  <Button variant="primary" type="submit">
+                    Reserve Room
+                  </Button>
+                  </div>
                 </Form>
-            )}
-        </div>
-            </Col>
+              )}
+            </div>
+          </Col>
         </Container>
-        
-    );
+        </>
+      );
 };
 
 export { ReservationForm };

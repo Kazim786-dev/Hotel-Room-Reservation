@@ -1,5 +1,5 @@
 import React, { useState,useContext } from 'react';
-import { Button, Alert } from 'react-bootstrap';
+import { Button, Alert, Container } from 'react-bootstrap';
 import { HotelNRoomContext } from '../Room/HotelNRoomProvider';
 import { RoomCards } from '../Room/RoomCards';
 
@@ -37,14 +37,20 @@ const AvailableRooms = () => {
   };
 
   return (
-    <div>
-      <h2>Get Available Rooms</h2>
+    <Container>
+      <h2 className="text-center">Get Available Rooms</h2>
+      <div className="my-4">
       {error && <Alert variant="danger">{error}</Alert>}
+      </div>
+      <div className="my-4">
       {availableRooms.length > 0 && <RoomCards rooms={availableRooms} updateRoomId={updateRoomId}/> }
+      </div>
+      <div className="d-flex justify-content-center">
       <Button variant="primary" onClick={handleGetAvailableRooms}>
         Get Available Rooms
       </Button>
-    </div>
+      </div>
+    </Container>
   );
 };
 

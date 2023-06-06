@@ -169,8 +169,8 @@ const InventoryDashboard = () => {
           </Card>
         </Col>
         <Col md={3}>
-        <Card bg="primary" text="white" >
-            <Card.Body>
+        <Card bg="primary" text="white" onClick={()=>{alert("Categories: [ Room Utility - Kitchen Utility - General Utility ]")}}>
+            <Card.Body >
               <Card.Title>Total Categories</Card.Title>
               {/* <Card.Text>{new Set(inventoryItems.map((item) => item.category)).size}</Card.Text> */}
               <Card.Text> {categories.length} </Card.Text>

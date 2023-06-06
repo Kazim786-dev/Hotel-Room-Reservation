@@ -247,6 +247,18 @@ const getBookingCalendar = async (req, res) => {
   }
 };
 
+const getRoomNumbers = async (req, res) => {
+
+  try {
+    const rooms = await Room.find();
+    res.json(rooms);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+
+}
+
 // export all the functions
 module.exports = { addRoom, reserverRoom, updateRoomType, updateRoomStatus, updateRoomAmenities, 
-                   updateRoomPrice, getBookingCalendar}
+                   updateRoomPrice, getBookingCalendar, getRoomNumbers}

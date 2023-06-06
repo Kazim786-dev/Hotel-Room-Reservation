@@ -5,10 +5,17 @@ import BookInspectionScheduleModal from '../Modals/BookInspectionScheduleModal';
 const RoomInspection = () => {
   const [inspectionSchedule, setInspectionSchedule] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  var rooms=[1,2,3,4,5]
+  const [rooms, setRooms] = useState([]);
+
 
   useEffect(() => {
     fetchInspectionSchedule();
+  }, []);
+
+  useEffect(() => {
+   
+    fetchRooms();
+    
   }, []);
 
   const fetchInspectionSchedule = async () => {
@@ -25,7 +32,28 @@ const RoomInspection = () => {
     }
   };
 
- 
+  
+  const fetchRooms = async () => {
+    try {
+      
+      
+      const response = await fetch('http://localhost:3001/rooms/getAll');
+      if (response.ok) {
+        const data = await response.json();
+        setRooms([]);
+        data.forEach(element => {
+          setRooms(prevArray => [...prevArray, element.roomNumber]);
+         
+        });
+
+      } else {
+        throw new Error('Failed to fetch cleaning schedule');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
   };

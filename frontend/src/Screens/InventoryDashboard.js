@@ -128,10 +128,10 @@ const InventoryDashboard = () => {
             }),
           })
             .then((response) => {
-              if (response.status == 200) {
+              if (response.status === 200) {
                 alert('Order is successfull');
                 fetchInventoryItems()
-            } else if(response.status == 500){
+            } else if(response.status === 500){
                alert("This item didnt have required quantity, however available quantity has been ordered. Please refill the inventory");
                fetchInventoryItems()
             }else{

@@ -5,7 +5,6 @@ import RoomCleaning from './Screens/RoomCleaning'
 import RoomInspection from './Screens/RoomInspection'
 import InventoryDashboard from './Screens/InventoryDashboard'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import { useEffect, useState } from 'react';
 
 import RoomList from './Components/Room/RoomList';
 import UpdateRoomPage from './Components/Room/UpdateRoomPage';
@@ -15,6 +14,8 @@ import { ReservationForm } from './Components/Room/ReserveRoom';
 import { AddRoomForm } from './Components/Room/AddRoom';
 import { AddHotelForm } from './Components/Hotel/AddHotel';
 import { AvailableRooms } from './Components/Hotel/TodayAvailableRooms';
+// import {Navbar} from './components/Navbar'
+import { useEffect, useState } from 'react';
 
 
 

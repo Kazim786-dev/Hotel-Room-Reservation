@@ -11,7 +11,8 @@ const hotelSchema = new mongoose.Schema({
   },
   contactInformation: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   availableRoomTypes: {
     type: [String],

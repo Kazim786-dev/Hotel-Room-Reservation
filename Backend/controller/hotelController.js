@@ -1,9 +1,9 @@
 
-const Hotel = require('../models/hotelModel');
-const Room = require('../models/roomModel');
-const Reservation = require('../models/reservationModel')
+const Hotel = require('../Models/hotelModel');
+const Room = require('../Models/roomModel');
+const Reservation = require('../Models/reservationModel')
 
-
+//hello
 // function to add a new hotel
 const addHotel = async (req, res) => {
     try {

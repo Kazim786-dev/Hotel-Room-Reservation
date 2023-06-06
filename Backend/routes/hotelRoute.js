@@ -1,7 +1,7 @@
 
 const express = require('express')
 const hotelRouter = express.Router()
-const {addHotel,getAllRooms,getAllAvailableRooms } = require('../controller/hotelController')
+const {addHotel,getAllRooms,getAllAvailableRooms } = require('../Controller/hotelController')
 const {verifyuserloggedin,checkRole} = require('../middleware/auth')
 
 // Route to add a hotel

@@ -4,7 +4,7 @@ const roomRouter = express.Router()
 const {verifyuserloggedin,checkRole} = require('../middleware/auth')
 
 const {addRoom,reserverRoom, updateRoomType, updateRoomStatus, updateRoomAmenities, 
-        updateRoomPrice, getBookingCalendar } = require('../controller/roomController')
+        updateRoomPrice, getBookingCalendar } = require('../Controller/roomController')
     
 
 // Route to add a room

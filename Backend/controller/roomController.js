@@ -1,8 +1,8 @@
 
-const Room = require('../models/roomModel');
-const Reservation = require('../models/reservationModel');
-const Hotel = require('../models/hotelModel')
-const User = require('../models/userModel')
+const Room = require('../Models/roomModel');
+const Reservation = require('../Models/reservationModel');
+const Hotel = require('../Models/hotelModel')
+const User = require('../Models/userModel')
 
 require("dotenv").config()
 const stripe = require('stripe')(process.env.STRIPE_KEY);

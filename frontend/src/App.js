@@ -15,7 +15,7 @@ import { ReservationForm } from './Components/Room/ReserveRoom';
 import { AddRoomForm } from './Components/Room/AddRoom';
 import { AddHotelForm } from './Components/Hotel/AddHotel';
 import { AvailableRooms } from './Components/Hotel/TodayAvailableRooms';
-
+import Signin from './Components/SignIn'
 
 
 function App() {
@@ -57,6 +57,7 @@ function App() {
     {isValid && <Navbar isValid={isValid}/>}
      <Routes>
     
+      <Route path="/" element={<HotelNRoomProvider><Signin/></HotelNRoomProvider>}/>
       <Route path="/Room-Cleaning" element={<RoomCleaning/>}/>
       <Route path="/Room-Inspection" element={<RoomInspection/>}/>
       <Route path="/Inventory" element={<InventoryDashboard/>}/>

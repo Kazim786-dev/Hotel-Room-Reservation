@@ -45,8 +45,6 @@ const AddRoomForm = () => {
         return;
       }
 
-
-
     try {
       const response = await fetch('http://localhost:3001/rooms/add-room', {
         method: 'POST',

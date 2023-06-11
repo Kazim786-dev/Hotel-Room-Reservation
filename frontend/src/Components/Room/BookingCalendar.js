@@ -45,13 +45,14 @@ const BookingCalendar = () => {
       <ListGroup>
         {bookingCalendar.map((booking) => (
           <ListGroup.Item key={`${booking.checkInDate}-${booking.checkOutDate}`} className="d-flex justify-content-between">
-            <div>
-              <strong>Check-in:</strong> {new Date(booking.checkInDate).toLocaleString()}
-            </div>
-            <div>
-              <strong>Check-out:</strong> {new Date(booking.checkOutDate).toLocaleString()}
-            </div>
-          </ListGroup.Item>
+          <div>
+            <strong>Check-in:</strong> {new Date(booking.checkInDate).toISOString().split('T')[0]}
+          </div>
+          <div>
+            <strong>Check-out:</strong> {new Date(booking.checkOutDate).toISOString().split('T')[0]}
+          </div>
+        </ListGroup.Item>
+        
         ))}
       </ListGroup>
     </Container>

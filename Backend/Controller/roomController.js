@@ -17,13 +17,13 @@ const addRoom = async (req, res, next) => {
       return res.status(404).json({ error: 'Hotel not found' });
     }
 
-    const foundRoom = await Room.findOne({ roomNumber:roomNumber,hotel:hotel._id });
+    const foundRoom = await Room.findOne({ roomNumber: roomNumber, hotel: hotel._id });
 
     if (foundRoom) {
       return res.status(409).json({ error: 'Room with the same room number already exists' });
     }
 
-    
+
     const room = new Room({
       roomNumber,
       type,
@@ -45,7 +45,7 @@ const addRoom = async (req, res, next) => {
 
 //function for payment process
 const createPaymentIntent = async (amount, currency, description, cardDetails) => {
-  
+
   // Create a payment method with the card details
   const paymentMethod = await stripe.paymentMethods.create({
     type: 'card',
@@ -81,12 +81,25 @@ const reserverRoom = async (req, res, next) => {
       return res.status(404).json({ error: 'Associated hotel not found' });
     }
 
-    // Convert check-in and check-out dates to Pakistan Standard Time (PST)
-    const checkInPST = new Date(checkInDate).toLocaleString('en-PK', { timeZone: 'Asia/Karachi' });
-    const checkOutPST = new Date(checkOutDate).toLocaleString('en-PK', { timeZone: 'Asia/Karachi' });
+    // Convert check-in and check-out dates to UTC format
+    // const checkInUTC = new Date(checkInDate).toISOString();
+    // const checkOutUTC = new Date(checkOutDate).toISOString();
+
+    const checkInUTC = new Date(checkInDate);
+    checkInUTC.setDate(checkInUTC.getDate() + 1);
+    const checkOutUTC = new Date(checkOutDate);
+    checkOutUTC.setDate(checkOutUTC.getDate() + 1);
+
+    const checkInISOString = checkInUTC.toISOString();
+    const checkOutISOString = checkOutUTC.toISOString();
+
+
 
     // Calculate total price based on the room price and duration of stay
-    const durationInDays = Math.ceil((new Date(checkOutPST) - new Date(checkInPST)) / (1000 * 60 * 60 * 24));
+    let durationInDays = Math.ceil((new Date(checkOutISOString) - new Date(checkInISOString)) / (1000 * 60 * 60 * 24));
+    if(durationInDays<1){
+      durationInDays=1;
+    }
     const totalPrice = room.price * durationInDays;
 
     // Create a payment intent with Stripe (multiplying 'totalPrice' with 100 cuz it takes 2500 as 25)
@@ -97,8 +110,8 @@ const reserverRoom = async (req, res, next) => {
       const reservation = new Reservation({
         user: user._id,
         room: room._id,
-        checkInDate: checkInPST,
-        checkOutDate: checkOutPST,
+        checkInDate: checkInISOString,
+        checkOutDate: checkOutISOString,
         totalPrice,
         paymentMethod,
         paymentId: paymentIntent.id, // Store the payment ID in the reservation
@@ -116,25 +129,26 @@ const reserverRoom = async (req, res, next) => {
 };
 
 
+
 // const reserverRoom = async (req, res, next) => {
 //     try {
 //       const { userId, roomId, checkInDate, checkOutDate } = req.body;
 //       const user = await User.findById(userId);
 //       const room = await Room.findById(roomId);
-      
+
 //       if (!user || !room) {
 //         return res.status(404).json({ error: 'User or room not found' });
 //       }
-      
+
 //       const hotel = await Hotel.findById(room.hotel);
 //       if (!hotel) {
 //         return res.status(404).json({ error: 'Associated hotel not found' });
 //       }
-      
+
 //       // Calculate total price based on the room price and duration of stay
 //       const durationInDays = Math.ceil((new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24));
 //       const totalPrice = room.price * durationInDays;
-      
+
 //       const reservation = new Reservation({
 //         user: user._id,
 // //        hotel:hotel._id,
@@ -143,7 +157,7 @@ const reserverRoom = async (req, res, next) => {
 //         checkOutDate,
 //         totalPrice
 //       });
-  
+
 //       const newReservation = await reservation.save();
 //       res.status(201).json(newReservation);
 //     } catch (error) {
@@ -155,67 +169,67 @@ const reserverRoom = async (req, res, next) => {
 
 // function to update the type of a room
 
-const updateRoomType = async (req, res,next) => {
-    try {
-      const { roomId, type } = req.body;
-      const room = await Room.findById(roomId);
-      if (!room) {
-        return res.status(404).json({ error: 'Room not found' });
-      }
-      room.type = type;
-      const updatedRoom = await room.save();
-      res.json(updatedRoom);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to update room type' });
+const updateRoomType = async (req, res, next) => {
+  try {
+    const { roomId, type } = req.body;
+    const room = await Room.findById(roomId);
+    if (!room) {
+      return res.status(404).json({ error: 'Room not found' });
     }
+    room.type = type;
+    const updatedRoom = await room.save();
+    res.json(updatedRoom);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update room type' });
+  }
 };
-  
-  // function to update the status (availability) of a room
-const updateRoomStatus = async (req, res,next) => {
-    try {
-      const { roomId, availability } = req.body;
-      const room = await Room.findById(roomId);
-      if (!room) {
-        return res.status(404).json({ error: 'Room not found' });
-      }
-      room.availability = availability;
-      const updatedRoom = await room.save();
-      res.json(updatedRoom);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to update room status' });
+
+// function to update the status (availability) of a room
+const updateRoomStatus = async (req, res, next) => {
+  try {
+    const { roomId, availability } = req.body;
+    const room = await Room.findById(roomId);
+    if (!room) {
+      return res.status(404).json({ error: 'Room not found' });
     }
+    room.availability = availability;
+    const updatedRoom = await room.save();
+    res.json(updatedRoom);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update room status' });
+  }
 };
-  
+
 // Controller function to update the amenities of a room
-const updateRoomAmenities = async (req, res,next) => {
-    try {
-      const { roomId, amenities } = req.body;
-      const room = await Room.findById(roomId);
-      if (!room) {
-        return res.status(404).json({ error: 'Room not found' });
-      }
-      room.amenities = amenities;
-      const updatedRoom = await room.save();
-      res.json(updatedRoom);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to update room amenities' });
+const updateRoomAmenities = async (req, res, next) => {
+  try {
+    const { roomId, amenities } = req.body;
+    const room = await Room.findById(roomId);
+    if (!room) {
+      return res.status(404).json({ error: 'Room not found' });
     }
+    room.amenities = amenities;
+    const updatedRoom = await room.save();
+    res.json(updatedRoom);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update room amenities' });
+  }
 };
-  
-  // Controller function to update the price of a room
-const updateRoomPrice = async (req, res,next) => {
-    try {
-      const { roomId, price } = req.body;
-      const room = await Room.findById(roomId);
-      if (!room) {
-        return res.status(404).json({ error: 'Room not found' });
-      }
-      room.price = price;
-      const updatedRoom = await room.save();
-      res.json(updatedRoom);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to update room price' });
+
+// Controller function to update the price of a room
+const updateRoomPrice = async (req, res, next) => {
+  try {
+    const { roomId, price } = req.body;
+    const room = await Room.findById(roomId);
+    if (!room) {
+      return res.status(404).json({ error: 'Room not found' });
     }
+    room.price = price;
+    const updatedRoom = await room.save();
+    res.json(updatedRoom);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update room price' });
+  }
 };
 
 // Function to get the booking calendar of a room
@@ -226,7 +240,7 @@ const getBookingCalendar = async (req, res) => {
     if (!room) {
       return res.status(404).json({ error: 'Room not found' });
     }
-    
+
     // Get the current date
     const currentDate = new Date();
 
@@ -235,14 +249,14 @@ const getBookingCalendar = async (req, res) => {
       room: roomId,
       checkOutDate: { $gte: currentDate }
     });
-    
+
     // Prepare the booking calendar by extracting the booking dates
     const bookingCalendar = reservations.map((reservation) => ({
       checkInDate: reservation.checkInDate,
       checkOutDate: reservation.checkOutDate
     }));
-    
-    res.json({bookingCalendar:bookingCalendar,roomNumber:room.roomNumber});
+
+    res.json({ bookingCalendar: bookingCalendar, roomNumber: room.roomNumber });
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve booking calendar' });
   }
@@ -261,5 +275,7 @@ const getRoomNumbers = async (req, res) => {
 }
 
 // export all the functions
-module.exports = { addRoom, reserverRoom, updateRoomType, updateRoomStatus, updateRoomAmenities, 
-                   updateRoomPrice, getBookingCalendar, getRoomNumbers}
+module.exports = {
+  addRoom, reserverRoom, updateRoomType, updateRoomStatus, updateRoomAmenities,
+  updateRoomPrice, getBookingCalendar, getRoomNumbers
+}

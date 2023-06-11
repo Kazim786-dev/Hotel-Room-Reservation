@@ -26,10 +26,10 @@ const ReservationForm = () => {
 
     useEffect(() => {
         const tokn = localStorage.getItem('token');
-        // const userid = localStorage.getItem('userId');
+        const userid = localStorage.getItem('userId');
         setToken(tokn);
-        // setUserId(userid);
-        setUserId('647ef636c30660b7844965a3');
+        setUserId(userid);
+        // setUserId('647ef636c30660b7844965a3');
         fetchBookingCalendar();
     }, [token]);
 
@@ -47,6 +47,7 @@ const ReservationForm = () => {
                 const data = await response.json();
                 setBookingCalendar(data.bookingCalendar);
                 setRoomNum(data.roomNumber)
+                console.log(data.bookingCalendar)
             } else {
                 const errorData = await response.json();
                 setError(errorData.error);
@@ -82,6 +83,7 @@ const ReservationForm = () => {
             } else {
                 const errorData = await response.json();
                 // setError(errorData.error);
+                console.log(errorData)
                 setError('Failed to make a reservation');
             }
         } catch (error) {
@@ -105,21 +107,31 @@ const ReservationForm = () => {
     };
 
     const isDateBooked = (date) => {
-        const checkIn = new Date(date);
-        const checkOut = new Date(date);
-        checkOut.setDate(checkOut.getDate() );
-        for (const booking of bookingCalendar) {
-            const bookingStart = new Date(booking.checkInDate);
-            const bookingEnd = new Date(booking.checkOutDate);
-            if (checkIn >= bookingStart && checkIn < bookingEnd) {
-                return true;
-            }
-            if (checkOut > bookingStart && checkOut <= bookingEnd) {
-                return true;
-            }
+      const checkIn = new Date(date);
+      const checkOut = new Date(date);
+      // checkOut.setDate(checkOut.getDate() + 1); // Add 1 day to checkOut date
+
+      for (const booking of bookingCalendar) {
+        const bookingStart = new Date(booking.checkInDate);
+        const bookingEnd = new Date(booking.checkOutDate);
+        bookingStart.setDate(bookingStart.getDate()-1)
+        bookingEnd.setDate(bookingEnd.getDate()-1)
+
+        if (checkIn >= bookingStart && checkIn <= bookingEnd) {
+          // console.log(checkIn)
+          // console.log(bookingStart)
+          return true;
         }
-        return false;
+        if (checkOut >= bookingStart && checkOut <= bookingEnd) {
+          // console.log(checkOut)
+          // console.log(bookingEnd)
+          return true;
+        }
+      }
+    
+      return false;
     };
+    
 
     return (
         <>

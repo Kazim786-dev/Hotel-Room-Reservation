@@ -13,7 +13,7 @@ const {validate} = require('./middleware/auth')
 
 
 
-mongoose.connect(process.env.mongo_url).then( ()=>{
+mongoose.connect(process.env.local_url).then( ()=>{
     console.log("DB connected")
 } ).catch( err=>{
     console.log(err)

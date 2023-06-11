@@ -17,7 +17,7 @@ const RoomCards = ({ rooms, updateRoomId }) => {
               <Card.Text>
                 <p>Type: {room.type}</p>
                 <p>Price: {room.price}</p>
-                <p>Available: {room.availability}</p>
+                <p>Available: {room.availability+""}</p>
                 <p>Capacity: {room.capacity}</p>
                 <p>
                   Amenities:{' '}
